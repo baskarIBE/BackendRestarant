@@ -38,10 +38,13 @@ const checkEmail=async (req, res, next) => {
     console.log(req.body)
   try{
       var findata = await User.findOne({email:req.body.email,otp:req.body.otp});
-      console.log(findata);
+      var updatedata = await User.updateOne({'email': req.body.query},{...req.body.data,...{otp_status: 'verified'}});
+      console.log(updatedata);
+   
 
-      var status = {status : 'OTP verified', email : req.body.email}
+      var status = {status : 'verified', email : req.body.email}
       findata != null ? res.send(status): res.send({status : 'OTP invalid'});
+    
   }
   catch(err){
      
@@ -74,14 +77,14 @@ const checkEmail=async (req, res, next) => {
 const register=async(req,res)=>{
     try{
         const {email,password}=req.body;
-        const finduser=await User.findOne({email});
-        if(!finduser){
+        const finduser=await User.findOne({email:req.body.email,otp_status:'verified'});
+        if(finduser){
             const hashpassword=await bcrpt.hash(password,10);
-            const resdata=await new User({...req.body,password:hashpassword}).save();
+            const resdata=await User.updateOne({...req.body,password:hashpassword});
             res.send({message:"successfully Registered"});
     }
     else{
-        res.send({message:"This email allready Exit"});
+        res.send({message:"Kindly verify the Email"});
     }
         
     }
