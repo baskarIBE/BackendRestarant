@@ -59,11 +59,14 @@ export const adminlogin=async(req,res)=>{
          if (!checkPassword) return res.status(400).json({ message: 'Password miss match' })
          const { token } = await generateToken(user)
         console.log(user);
+
          if (user) {
+            const email = user[0].email;
+            const id = user[0]._id;
              res.status(200).json({
                  user: {
-                     id: user._id,
-                     email: user.email
+                        id:id,
+                     email: email
                  },
                  token,
                  message: 'Login Success'
