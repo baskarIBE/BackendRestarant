@@ -19,7 +19,7 @@ export const getallprodu = async(req,res)=>{
 
         const response=await Product.find({});//findall
     // console.log(new User(req.body))
-    console.log(response);
+    // console.log(response);
     res.send(response);
 }
 catch(err){
@@ -27,3 +27,38 @@ catch(err){
 }
    
 }
+
+export const proupdata=async (req, res, next) => {  
+   
+  try{
+      var findata = await Product.findOne({id:req.body.id});
+      var updatedata = await Product.updateOne({'id': req.body.id},{...req.body.updata});
+
+      var status = {status : 'updated', id : req.body.id}
+      findata != null ? res.send(status): res.send({status : 'Updation Failed'});
+    
+  }
+  catch(err){
+     
+      res.send(err);
+  }
+
+  }
+
+  export const delprodet=async (req, res) => {  
+    const deid=req.params.id;
+    console.log(deid);
+    try{
+        
+        var findata = await Product.deleteOne({_id:deid});
+
+        var status = {status : 'Deleted', id : req.body.id}
+        findata != null ? res.send(status): res.send({status : 'product not Deleted'});
+      
+    }
+    catch(err){
+       
+        res.send(err);
+    }
+  
+    }
