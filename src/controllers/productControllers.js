@@ -62,3 +62,21 @@ export const proupdata=async (req, res, next) => {
     }
   
     }
+
+    export const mandelepro=async (req, res) => {  
+        
+        try{
+            
+            
+            var findata = await Product.deleteMany({_id:req.body});
+    
+            var status = {status : 'Deleted', id : req.body.id}
+            findata != null ? res.send(status): res.send({status : 'product not Deleted'});
+          
+        }
+        catch(err){
+           
+            res.send(err);
+        }
+      
+        }
